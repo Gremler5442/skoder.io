@@ -302,6 +302,9 @@
           <div class="mb-3">
             <input type="tel" class="form-control" placeholder="Номер телефона">
           </div>
+		  
+		  <input type="text" name="company" autocomplete="off" tabindex="-1" style="position:absolute; left:-9999px;">
+		  
 		  <div class="mb-3">
             <textarea class="form-control" placeholder="Комментарий" rows="3"></textarea>
           </div>
@@ -315,6 +318,9 @@
 <script>
 document.querySelector("form").addEventListener("submit", async function(e) {
   e.preventDefault();
+
+  const honeypot = document.querySelector('input[name="company"]').value;
+  if (honeypot) return;
 
   const submitBtn = document.getElementById("submitBtn");
 

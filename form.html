@@ -64,7 +64,9 @@
                 <option value="phyco">Психология</option>
               </select>
             </div>
-
+			
+			<input type="text" name="company" autocomplete="off" tabindex="-1" style="position:absolute; left:-9999px;">
+			
             <div class="mb-3">
               <textarea class="form-control" rows="4" placeholder="Комментарий"></textarea>
             </div>
@@ -106,6 +108,9 @@
 <script>
 document.querySelector("form").addEventListener("submit", async function(e) {
   e.preventDefault();
+  
+  const honeypot = document.querySelector('input[name="company"]').value;
+  if (honeypot) return;
 
   const submitBtn = document.getElementById("submitBtn");
 
