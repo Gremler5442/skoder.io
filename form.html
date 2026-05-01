@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Оставить заявку</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body { background: #0b0f14; color: #fff; }
+
+    .brand { color: #7CFC00; font-weight: bold; font-size: 28px; }
+
+    .btn-green { background: #7CFC00; border: none; color: #000; font-weight: 600; }
+
+    .form-wrapper {
+      background: #111;
+      padding: 30px;
+      border-radius: 12px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="d-flex justify-content-between align-items-center py-3">
+    <a href="index.html" class="brand text-decoration-none">
+      &lt;/&gt; ШКОДЕР
+    </a>
+  </div>
+</div>
+
+<section class="py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+
+        <div class="form-wrapper">
+          <h2 class="text-center mb-4">Оставить заявку</h2>
+
+          <form>
+
+            <div class="mb-3">
+              <input type="text" class="form-control" placeholder="Имя родителя" required>
+            </div>
+
+            <div class="mb-3">
+              <input type="tel" class="form-control" placeholder="Номер телефона" required>
+            </div>
+
+            <!--
+              ВАЖНО:
+              value у option = ID курса
+              Именно его мы будем подставлять из URL (?course=unity)
+            -->
+            <div class="mb-3">
+              <select class="form-select" id="courseSelect" required>
+                <option disabled selected>Выберите курс</option>
+                <option value="scratch">Scratch</option>
+                <option value="unity">Unity разработка</option>
+                <option value="photoshop">Photoshop</option>
+				<option value="figma">Figma Digital Desing</option>
+                <option value="neiro">Нейросети</option>
+                <option value="phyco">Психология</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <textarea class="form-control" rows="4" placeholder="Комментарий"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-green w-100" id="submitBtn">Отправить заявку</button>
+
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!--
+  ЭТОТ СКРИПТ:
+  - читает параметр ?course=...
+  - автоматически выбирает нужный курс в select
+
+  Пример ссылки с лендинга:
+  lead.html?course=unity
+-->
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const course = params.get('course');
+
+  if (course) {
+    const select = document.getElementById('courseSelect');
+
+    // Проверяем, есть ли такой option
+    const optionExists = [...select.options].some(opt => opt.value === course);
+
+    if (optionExists) {
+      select.value = course;
+    }
+  }
+</script>
+
+<script>
+document.querySelector("form").addEventListener("submit", async function(e) {
+  e.preventDefault();
+
+  const submitBtn = document.getElementById("submitBtn");
+
+  const name = document.querySelector('input[type="text"]').value;
+  const phone = document.querySelector('input[type="tel"]').value;
+  const select = document.getElementById("courseSelect");
+  const course = select.selectedOptions[0].text;
+  const message = document.querySelector('textarea').value;
+
+  submitBtn.disabled = true;
+  const oldText = submitBtn.textContent;
+  submitBtn.textContent = "Отправка...";
+
+  try {
+    await fetch("https://script.google.com/macros/s/AKfycbya22A-g6rDddiMa0F22VmgQMoGHFWG2ONIbQJ53zLfcO-XTz2XycX-kO2VJFgIp9tC/exec", {
+      method: "POST",
+      body: JSON.stringify({
+        name,
+        phone,
+        course,
+        message
+      })
+    });
+
+    alert("Заявка отправлена");
+
+    this.reset();
+
+  } catch (err) {
+    alert("Ошибка отправки. Попробуйте ещё раз.");
+  }
+
+  submitBtn.disabled = false;
+  submitBtn.textContent = oldText;
+});
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
