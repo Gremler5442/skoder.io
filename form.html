@@ -119,13 +119,14 @@ document.querySelector("form").addEventListener("submit", async function(e) {
   const select = document.getElementById("courseSelect");
   const course = select.selectedOptions[0].text;
   const message = document.querySelector('textarea').value;
+  const state = "Не обработан";
 
   submitBtn.disabled = true;
   const oldText = submitBtn.textContent;
   submitBtn.textContent = "Отправка...";
 
   try {
-    await fetch("https://script.google.com/macros/s/AKfycbya22A-g6rDddiMa0F22VmgQMoGHFWG2ONIbQJ53zLfcO-XTz2XycX-kO2VJFgIp9tC/exec", {
+    await fetch("https://script.google.com/macros/s/AKfycbwQq8X31FGQ36V_kPxnAH5-Xk3j45A6dgggxkZrmbTVCkufdncG9-LoXMg_OtajkB64/exec", {
       method: "POST",
       body: JSON.stringify({
         name,
